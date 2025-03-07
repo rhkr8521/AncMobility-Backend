@@ -45,6 +45,7 @@ public class SecurityConfig {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(Arrays.asList(
                             "https://www.ancmobility.co.kr",
+                            "https://www.ancmobility.co.kr:81",
                             "http://localhost:5173"
                     ));
                     config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH","DELETE", "OPTIONS"));
