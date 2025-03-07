@@ -13,6 +13,9 @@ public enum SuccessStatus {
      * 200
      */
     SEND_REGISTER_SUCCESS(HttpStatus.OK,"회원가입 성공"),
+    SEND_LOGIN_SUCCESS(HttpStatus.OK,"로그인 성공"),
+    SEND_REISSUE_TOKEN_SUCCESS(HttpStatus.OK,"토큰 재발급 성공"),
+    GET_USERINFO_SUCCESS(HttpStatus.OK,"사용자 정보 조회 성공"),
 
     /**
      * 201
