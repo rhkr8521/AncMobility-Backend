@@ -16,11 +16,14 @@ public enum SuccessStatus {
     SEND_LOGIN_SUCCESS(HttpStatus.OK,"로그인 성공"),
     SEND_REISSUE_TOKEN_SUCCESS(HttpStatus.OK,"토큰 재발급 성공"),
     GET_USERINFO_SUCCESS(HttpStatus.OK,"사용자 정보 조회 성공"),
+    UPDATE_TERM_SUCCESS(HttpStatus.OK,"약관 수정 성공"),
+    GET_TERM_SUCCESS(HttpStatus.OK,"약관 조회 성공"),
 
     /**
      * 201
      */
     CREATE_RECRUIT_ARTICLE_SUCCESS(HttpStatus.CREATED, "공고 등록 성공"),
+    SAVE_TERM_SUCCESS(HttpStatus.CREATED,"약관 등록 성공"),
 
     ;
 
