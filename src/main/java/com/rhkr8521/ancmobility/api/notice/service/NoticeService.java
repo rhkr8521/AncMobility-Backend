@@ -30,7 +30,6 @@ public class NoticeService {
     private final MemberRepository memberRepository;
 
     // 공지사항 목록 조회
-    @Transactional(readOnly = true)
     public NoticePageResponseDTO getNotices(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Notice> notices = noticeRepository.findAllByOrderByCreatedAtDesc(pageable); // 최신순으로 정렬
@@ -47,7 +46,6 @@ public class NoticeService {
     }
 
     // 공지사항 상세 조회
-    @Transactional(readOnly = true)
     public NoticeDetailDTO getNotice(Long id) {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.NOTICE_NOTFOUND_EXCEPTION.getMessage()));
