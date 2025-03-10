@@ -35,6 +35,7 @@ public enum ErrorStatus {
     USER_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 사용자를 찾을 수 없습니다."),
     TERM_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 약관 타입이 존재하지 않습니다."),
     NOTICE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"공지사항을 찾을 수 없습니다."),
+    FAQ_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"FAQ를 찾을 수 없습니다."),
 
     /**
      * 500 SERVER_ERROR
