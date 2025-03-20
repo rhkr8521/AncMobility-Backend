@@ -75,7 +75,7 @@ jobs:
 
       # 3. 최신 이미지를 컨테이너화하여 실행시킵니다
       - name: docker run new container
-        run: docker run --add-host=host.docker.internal:host-gateway --name ancmobility --rm -d -p 8080:8080 -v /var/www/images:/app/images ${{ secrets.DOCKERHUB_USERNAME }}/ancmobility_cicd_action
+        run: docker run --add-host=host.docker.internal:host-gateway --name ancmobility --rm -d -p 8080:8080 -v /home/rhkr8521/images:/app/images ${{ secrets.DOCKERHUB_USERNAME }}/ancmobility_cicd_action
 
       # 4. 미사용 이미지를 정리합니다
       - name: delete old docker image
