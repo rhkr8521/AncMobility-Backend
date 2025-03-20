@@ -72,6 +72,27 @@ public class CompanyInfoService {
         return "https://www.ancmobility.co.kr:81/api/images/" + newFileName;
     }
 
+    // 기존 이미지 삭제 (URL에서 파일명을 추출하여 실제 파일 삭제)
+    private void deleteImage(String imageUrl) {
+        if (imageUrl == null) {
+            return;
+        }
+        final String prefix = "https://www.ancmobility.co.kr:81/api/images/";
+        if (!imageUrl.startsWith(prefix)) {
+            return;
+        }
+        String fileName = imageUrl.substring(prefix.length());
+        File file = new File(imageServerPath, fileName);
+        if (file.exists()) {
+            boolean deleted = file.delete();
+            if (!deleted) {
+                log.warn("기존 이미지 삭제 실패: {}", file.getAbsolutePath());
+            } else {
+                log.info("기존 이미지 삭제 성공: {}", file.getAbsolutePath());
+            }
+        }
+    }
+
     // 회사 정보 생성
     @Transactional
     public void createCompanyInfo(CompanyInfoRequestDTO dto,
@@ -111,15 +132,17 @@ public class CompanyInfoService {
         CompanyInfo companyInfo = companyInfoRepository.findByCompanyInfoType(dto.getCompanyInfoType())
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.COMPANYINFO_TYPE_NOTFOUND_EXCEPTION.getMessage()));
 
-        // 새 배너 이미지가 있으면 저장, 없으면 기존 배너 이미지 URL 유지
+        // 배너 이미지 업데이트: 새 파일이 있으면 기존 파일 삭제 후 저장, 없으면 기존 URL 유지
         String bannerImageUrl = companyInfo.getBannerImage();
         if (bannerImageFile != null && !bannerImageFile.isEmpty()) {
+            deleteImage(bannerImageUrl);
             bannerImageUrl = storeImage(bannerImageFile);
         }
 
-        // 새 일반 이미지가 있으면 저장, 없으면 기존 이미지 URL 유지
+        // 일반 이미지 업데이트: 새 파일이 있으면 기존 파일 삭제 후 저장, 없으면 기존 URL 유지
         String imageUrl = companyInfo.getImage();
         if (imageFile != null && !imageFile.isEmpty()) {
+            deleteImage(imageUrl);
             imageUrl = storeImage(imageFile);
         }
 
