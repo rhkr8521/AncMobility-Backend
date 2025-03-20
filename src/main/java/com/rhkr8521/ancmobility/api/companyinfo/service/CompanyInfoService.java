@@ -3,6 +3,7 @@ package com.rhkr8521.ancmobility.api.companyinfo.service;
 import com.rhkr8521.ancmobility.api.companyinfo.dto.CompanyInfoRequestDTO;
 import com.rhkr8521.ancmobility.api.companyinfo.dto.CompanyInfoResponseDTO;
 import com.rhkr8521.ancmobility.api.companyinfo.entity.CompanyInfo;
+import com.rhkr8521.ancmobility.api.companyinfo.entity.CompanyInfoType;
 import com.rhkr8521.ancmobility.api.companyinfo.repository.CompanyInfoRepository;
 import com.rhkr8521.ancmobility.api.member.entity.Role;
 import com.rhkr8521.ancmobility.common.exception.BadRequestException;
@@ -37,7 +38,7 @@ public class CompanyInfoService {
         }
     }
 
-    // 이미지 저장 로직
+    // 이미지 저장
     private String storeImage(MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
             return null;
@@ -73,7 +74,10 @@ public class CompanyInfoService {
 
     // 회사 정보 생성
     @Transactional
-    public void createCompanyInfo(CompanyInfoRequestDTO dto, MultipartFile imageFile, Role userRole) {
+    public void createCompanyInfo(CompanyInfoRequestDTO dto,
+                                  MultipartFile bannerImageFile,
+                                  MultipartFile imageFile,
+                                  Role userRole) {
         validateAdmin(userRole);
 
         // 이미 해당 타입의 정보가 존재하는지 확인 (한 타입당 1건만 등록 가능)
@@ -81,11 +85,13 @@ public class CompanyInfoService {
             throw new BadRequestException(ErrorStatus.ALREADY_CREATE_COMPANYINFO_EXCEPTION.getMessage());
         }
 
+        String bannerImageUrl = storeImage(bannerImageFile);
         String imageUrl = storeImage(imageFile);
 
         CompanyInfo companyInfo = CompanyInfo.builder()
                 .title(dto.getTitle())
                 .subTitle(dto.getSubTitle())
+                .bannerImage(bannerImageUrl)
                 .image(imageUrl)
                 .companyInfoType(dto.getCompanyInfoType())
                 .build();
@@ -96,13 +102,22 @@ public class CompanyInfoService {
 
     // 회사 정보 수정
     @Transactional
-    public void updateCompanyInfo(CompanyInfoRequestDTO dto, MultipartFile imageFile, Role userRole) {
+    public void updateCompanyInfo(CompanyInfoRequestDTO dto,
+                                  MultipartFile bannerImageFile,
+                                  MultipartFile imageFile,
+                                  Role userRole) {
         validateAdmin(userRole);
 
         CompanyInfo companyInfo = companyInfoRepository.findByCompanyInfoType(dto.getCompanyInfoType())
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.COMPANYINFO_TYPE_NOTFOUND_EXCEPTION.getMessage()));
 
-        // 새 이미지가 있으면 저장, 없으면 기존 이미지 URL 유지
+        // 새 배너 이미지가 있으면 저장, 없으면 기존 배너 이미지 URL 유지
+        String bannerImageUrl = companyInfo.getBannerImage();
+        if (bannerImageFile != null && !bannerImageFile.isEmpty()) {
+            bannerImageUrl = storeImage(bannerImageFile);
+        }
+
+        // 새 일반 이미지가 있으면 저장, 없으면 기존 이미지 URL 유지
         String imageUrl = companyInfo.getImage();
         if (imageFile != null && !imageFile.isEmpty()) {
             imageUrl = storeImage(imageFile);
@@ -111,6 +126,7 @@ public class CompanyInfoService {
         companyInfo = companyInfo.toBuilder()
                 .title(dto.getTitle())
                 .subTitle(dto.getSubTitle())
+                .bannerImage(bannerImageUrl)
                 .image(imageUrl)
                 .build();
 
@@ -120,7 +136,7 @@ public class CompanyInfoService {
 
     // 회사 정보 조회
     @Transactional(readOnly = true)
-    public CompanyInfoResponseDTO getCompanyInfoByType(com.rhkr8521.ancmobility.api.companyinfo.entity.CompanyInfoType companyInfoType) {
+    public CompanyInfoResponseDTO getCompanyInfoByType(CompanyInfoType companyInfoType) {
         CompanyInfo companyInfo = companyInfoRepository.findByCompanyInfoType(companyInfoType)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.COMPANYINFO_TYPE_NOTFOUND_EXCEPTION.getMessage()));
         return CompanyInfoResponseDTO.fromEntity(companyInfo);

@@ -30,7 +30,8 @@ public class CompanyInfoController {
             @RequestParam("companyInfoType") CompanyInfoType companyInfoType,
             @RequestParam("title") String title,
             @RequestParam("subTitle") String subTitle,
-            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "bannerImage", required = false) MultipartFile bannerImageFile,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
             @AuthenticationPrincipal SecurityMember securityMember
     ) {
 
@@ -40,7 +41,7 @@ public class CompanyInfoController {
                 .subTitle(subTitle)
                 .build();
 
-        companyInfoService.createCompanyInfo(dto, image, securityMember.getRole());
+        companyInfoService.createCompanyInfo(dto, bannerImageFile, imageFile, securityMember.getRole());
         return ApiResponse.success_only(SuccessStatus.SAVE_COMPANYINFO_SUCCESS);
     }
 
@@ -50,7 +51,8 @@ public class CompanyInfoController {
             @RequestParam("companyInfoType") CompanyInfoType companyInfoType,
             @RequestParam("title") String title,
             @RequestParam("subTitle") String subTitle,
-            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(value = "bannerImage", required = false) MultipartFile bannerImageFile,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile,
             @AuthenticationPrincipal SecurityMember securityMember
     ) {
 
@@ -60,7 +62,7 @@ public class CompanyInfoController {
                 .subTitle(subTitle)
                 .build();
 
-        companyInfoService.updateCompanyInfo(dto, image, securityMember.getRole());
+        companyInfoService.updateCompanyInfo(dto, bannerImageFile, imageFile, securityMember.getRole());
         return ApiResponse.success_only(SuccessStatus.UPDATE_COMPANYINFO_SUCCESS);
     }
 

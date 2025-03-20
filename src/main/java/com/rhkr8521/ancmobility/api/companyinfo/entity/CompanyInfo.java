@@ -17,6 +17,7 @@ public class CompanyInfo {
 
     private String title;
     private String subTitle;
+    private String bannerImage;
     private String image;
 
     @Enumerated(EnumType.STRING)
