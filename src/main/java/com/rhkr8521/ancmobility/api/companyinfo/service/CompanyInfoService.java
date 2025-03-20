@@ -9,6 +9,7 @@ import com.rhkr8521.ancmobility.common.exception.BadRequestException;
 import com.rhkr8521.ancmobility.common.exception.NotFoundException;
 import com.rhkr8521.ancmobility.common.response.ErrorStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompanyInfoService {
@@ -44,20 +46,19 @@ public class CompanyInfoService {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String originalFilename = imageFile.getOriginalFilename();
         String extension = "";
-
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        String newFileName = timestamp + extension; // 실제 서버에 저장될 파일명
-
-        // 서버 내 물리 파일 경로
+        String newFileName = timestamp + extension;
         File dest = new File(imageServerPath, newFileName);
         try {
             imageFile.transferTo(dest);
         } catch (IOException e) {
+            // 디버깅을 위한 에러 로그 출력
+            log.error("이미지 저장 중 오류 발생 - 파일명: {}, 경로: {}, 에러: {}",
+                    newFileName, dest.getAbsolutePath(), e.getMessage(), e);
             throw new BadRequestException(ErrorStatus.FAIL_IMAGE_UPLOAD_EXCEPTION.getMessage());
         }
-
         return "https://www.ancmobility.co.kr:81/api/images/" + newFileName;
     }
 
