@@ -22,6 +22,7 @@ public enum ErrorStatus {
     NEED_ADMIN_ROLE_EXCEPTION(HttpStatus.BAD_REQUEST,"관리자 권한이 필요합니다."),
     ALREADY_CREATE_TERM_EXCEPTION(HttpStatus.BAD_REQUEST,"이미 해당 타입의 약관이 등록되었습니다."),
     ALREADY_CREATE_COMPANYINFO_EXCEPTION(HttpStatus.BAD_REQUEST,"이미 해당 타입의 회사 정보가 등록되었습니다."),
+    ALREADY_CREATE_SERVICEINFO_EXCEPTION(HttpStatus.BAD_REQUEST,"이미 해당 타입의 서비스 정보가 등록되었습니다."),
 
     /**
      * 401 UNAUTHORIZED
@@ -36,6 +37,7 @@ public enum ErrorStatus {
     USER_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 사용자를 찾을 수 없습니다."),
     TERM_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 약관 타입이 존재하지 않습니다."),
     COMPANYINFO_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND, "해당 회사 정보 타입이 존재하지 않습니다."),
+    SERVICEINFO_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND, "해당 서비스 정보 타입이 존재하지 않습니다."),
     NOTICE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"공지사항을 찾을 수 없습니다."),
     FAQ_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"FAQ를 찾을 수 없습니다."),
 

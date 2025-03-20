@@ -26,6 +26,8 @@ public enum SuccessStatus {
     DELETE_FAQ_SUCCESS(HttpStatus.OK,"FAQ 삭제 성공"),
     UPDATE_COMPANYINFO_SUCCESS(HttpStatus.OK,"회사 정보 수정 성공"),
     GET_COMPANYINFO_SUCCESS(HttpStatus.OK,"회사 정보 조회 성공"),
+    UPDATE_SERVICEINFO_SUCCESS(HttpStatus.OK,"서비스 정보 수정 성공"),
+    GET_SERVICEINFO_SUCCESS(HttpStatus.OK,"서비스 정보 조회 성공"),
 
     /**
      * 201
@@ -34,6 +36,7 @@ public enum SuccessStatus {
     SAVE_TERM_SUCCESS(HttpStatus.CREATED,"약관 등록 성공"),
     CREATE_FAQ_SUCCESS(HttpStatus.CREATED, "FAQ 등록 성공"),
     SAVE_COMPANYINFO_SUCCESS(HttpStatus.CREATED,"회사 정보 등록 성공"),
+    SAVE_SERVICEINFO_SUCCESS(HttpStatus.CREATED,"서비스 정보 등록 성공"),
 
     ;
 
