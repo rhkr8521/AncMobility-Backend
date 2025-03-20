@@ -35,7 +35,7 @@ public class CompanyInfoService {
         }
     }
 
-    // 이미지 저장
+    // 이미지 저장 로직
     private String storeImage(MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
             return null;
@@ -44,34 +44,39 @@ public class CompanyInfoService {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String originalFilename = imageFile.getOriginalFilename();
         String extension = "";
+
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        String newFileName = timestamp + extension;
+        String newFileName = timestamp + extension; // 실제 서버에 저장될 파일명
+
+        // 서버 내 물리 파일 경로
         File dest = new File(imageServerPath, newFileName);
         try {
             imageFile.transferTo(dest);
         } catch (IOException e) {
             throw new BadRequestException(ErrorStatus.FAIL_IMAGE_UPLOAD_EXCEPTION.getMessage());
         }
-        return newFileName;
+
+        return "https://www.ancmobility.co.kr:81/api/images/" + newFileName;
     }
 
     // 회사 정보 생성
     @Transactional
-    public void createCompanyInfo(CompanyInfoRequestDTO dto, Role userRole) {
+    public void createCompanyInfo(CompanyInfoRequestDTO dto, MultipartFile imageFile, Role userRole) {
         validateAdmin(userRole);
 
+        // 이미 해당 타입의 정보가 존재하는지 확인 (한 타입당 1건만 등록 가능)
         if (companyInfoRepository.findByCompanyInfoType(dto.getCompanyInfoType()).isPresent()) {
             throw new BadRequestException(ErrorStatus.ALREADY_CREATE_COMPANYINFO_EXCEPTION.getMessage());
         }
 
-        String savedImageName = storeImage(dto.getImage());
+        String imageUrl = storeImage(imageFile);
 
         CompanyInfo companyInfo = CompanyInfo.builder()
                 .title(dto.getTitle())
                 .subTitle(dto.getSubTitle())
-                .image(savedImageName)
+                .image(imageUrl)
                 .companyInfoType(dto.getCompanyInfoType())
                 .build();
 
@@ -81,21 +86,22 @@ public class CompanyInfoService {
 
     // 회사 정보 수정
     @Transactional
-    public void updateCompanyInfo(CompanyInfoRequestDTO dto, Role userRole) {
+    public void updateCompanyInfo(CompanyInfoRequestDTO dto, MultipartFile imageFile, Role userRole) {
         validateAdmin(userRole);
 
         CompanyInfo companyInfo = companyInfoRepository.findByCompanyInfoType(dto.getCompanyInfoType())
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.COMPANYINFO_TYPE_NOTFOUND_EXCEPTION.getMessage()));
 
-        String savedImageName = companyInfo.getImage();
-        if (dto.getImage() != null && !dto.getImage().isEmpty()) {
-            savedImageName = storeImage(dto.getImage());
+        // 새 이미지가 있으면 저장, 없으면 기존 이미지 URL 유지
+        String imageUrl = companyInfo.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = storeImage(imageFile);
         }
 
         companyInfo = companyInfo.toBuilder()
                 .title(dto.getTitle())
                 .subTitle(dto.getSubTitle())
-                .image(savedImageName)
+                .image(imageUrl)
                 .build();
 
         CompanyInfo updated = companyInfoRepository.save(companyInfo);
@@ -105,7 +111,6 @@ public class CompanyInfoService {
     // 회사 정보 조회
     @Transactional(readOnly = true)
     public CompanyInfoResponseDTO getCompanyInfoByType(com.rhkr8521.ancmobility.api.companyinfo.entity.CompanyInfoType companyInfoType) {
-
         CompanyInfo companyInfo = companyInfoRepository.findByCompanyInfoType(companyInfoType)
                 .orElseThrow(() -> new NotFoundException(ErrorStatus.COMPANYINFO_TYPE_NOTFOUND_EXCEPTION.getMessage()));
         return CompanyInfoResponseDTO.fromEntity(companyInfo);
