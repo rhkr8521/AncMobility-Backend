@@ -21,6 +21,7 @@ public enum ErrorStatus {
     UNAUTHORIZED_REFRESH_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST,"유효하지 않은 리프레시 토큰 입니다."),
     NEED_ADMIN_ROLE_EXCEPTION(HttpStatus.BAD_REQUEST,"관리자 권한이 필요합니다."),
     ALREADY_CREATE_TERM_EXCEPTION(HttpStatus.BAD_REQUEST,"이미 해당 타입의 약관이 등록되었습니다."),
+    ALREADY_CREATE_COMPANYINFO_EXCEPTION(HttpStatus.BAD_REQUEST,"이미 해당 타입의 회사 정보가 등록되었습니다."),
 
     /**
      * 401 UNAUTHORIZED
@@ -34,13 +35,14 @@ public enum ErrorStatus {
     NOT_LOGIN_EXCEPTION(HttpStatus.NOT_FOUND,"로그인이 필요합니다."),
     USER_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 사용자를 찾을 수 없습니다."),
     TERM_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"해당 약관 타입이 존재하지 않습니다."),
+    COMPANYINFO_TYPE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND, "해당 회사 정보 타입이 존재하지 않습니다."),
     NOTICE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"공지사항을 찾을 수 없습니다."),
     FAQ_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"FAQ를 찾을 수 없습니다."),
 
     /**
      * 500 SERVER_ERROR
      */
-    FAIL_UPLOAD_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드 실패하였습니다."),
+    FAIL_IMAGE_UPLOAD_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,"이미지 저장 중 오류가 발생하였습니다."),
 
     ;
 
