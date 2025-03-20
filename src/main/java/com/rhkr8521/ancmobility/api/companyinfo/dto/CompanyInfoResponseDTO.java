@@ -11,6 +11,7 @@ public class CompanyInfoResponseDTO {
     private CompanyInfoType companyInfoType;
     private String title;
     private String subTitle;
+    private String bannerImage;
     private String image;
 
     public static CompanyInfoResponseDTO fromEntity(CompanyInfo companyInfo) {
@@ -18,6 +19,7 @@ public class CompanyInfoResponseDTO {
                 .companyInfoType(companyInfo.getCompanyInfoType())
                 .title(companyInfo.getTitle())
                 .subTitle(companyInfo.getSubTitle())
+                .bannerImage(companyInfo.getBannerImage())
                 .image(companyInfo.getImage())
                 .build();
     }
