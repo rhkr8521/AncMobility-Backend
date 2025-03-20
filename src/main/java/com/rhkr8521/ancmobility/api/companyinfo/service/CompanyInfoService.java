@@ -51,10 +51,19 @@ public class CompanyInfoService {
         }
         String newFileName = timestamp + extension;
         File dest = new File(imageServerPath, newFileName);
+
+        // 부모 디렉토리가 없으면 생성
+        if (!dest.getParentFile().exists()) {
+            boolean dirsCreated = dest.getParentFile().mkdirs();
+            if (!dirsCreated) {
+                log.error("디렉토리 생성 실패: {}", dest.getParentFile().getAbsolutePath());
+                throw new BadRequestException("이미지 저장 경로 디렉토리 생성에 실패하였습니다.");
+            }
+        }
+
         try {
             imageFile.transferTo(dest);
         } catch (IOException e) {
-            // 디버깅을 위한 에러 로그 출력
             log.error("이미지 저장 중 오류 발생 - 파일명: {}, 경로: {}, 에러: {}",
                     newFileName, dest.getAbsolutePath(), e.getMessage(), e);
             throw new BadRequestException(ErrorStatus.FAIL_IMAGE_UPLOAD_EXCEPTION.getMessage());
