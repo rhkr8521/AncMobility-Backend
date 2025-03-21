@@ -28,6 +28,8 @@ public enum SuccessStatus {
     GET_COMPANYINFO_SUCCESS(HttpStatus.OK,"회사 정보 조회 성공"),
     UPDATE_SERVICEINFO_SUCCESS(HttpStatus.OK,"서비스 정보 수정 성공"),
     GET_SERVICEINFO_SUCCESS(HttpStatus.OK,"서비스 정보 조회 성공"),
+    UPDATE_HOMEINFO_SUCCESS(HttpStatus.OK,"홈 화면 정보 수정 성공"),
+    GET_HOMEINFO_SUCCESS(HttpStatus.OK,"홈 화면 정보 조회 성공"),
 
     /**
      * 201
@@ -37,6 +39,7 @@ public enum SuccessStatus {
     CREATE_FAQ_SUCCESS(HttpStatus.CREATED, "FAQ 등록 성공"),
     SAVE_COMPANYINFO_SUCCESS(HttpStatus.CREATED,"회사 정보 등록 성공"),
     SAVE_SERVICEINFO_SUCCESS(HttpStatus.CREATED,"서비스 정보 등록 성공"),
+    SAVE_HOMEINFO_SUCCESS(HttpStatus.CREATED,"홈 화면 정보 등록 성공"),
 
     ;
 
