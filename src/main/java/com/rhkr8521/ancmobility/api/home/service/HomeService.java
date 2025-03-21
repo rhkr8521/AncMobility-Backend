@@ -43,14 +43,14 @@ public class HomeService {
         if (imageFile == null || imageFile.isEmpty()) {
             return null;
         }
-        // 현재 날짜 기반 파일명 생성 (년월일_시분초)
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // UUID 기반 파일명 생성
+        String uuid = java.util.UUID.randomUUID().toString();
         String originalFilename = imageFile.getOriginalFilename();
         String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        String newFileName = timestamp + extension;
+        String newFileName = uuid + extension;
         File dest = new File(imageServerPath, newFileName);
 
         // 부모 디렉토리가 없으면 생성
