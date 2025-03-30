@@ -42,6 +42,7 @@ public enum ErrorStatus {
     HOMEINFO_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND, "홈 정보가 존재하지 않습니다."),
     NOTICE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"공지사항을 찾을 수 없습니다."),
     FAQ_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"FAQ를 찾을 수 없습니다."),
+    NEWS_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"뉴스를 찾을 수 없습니다."),
 
     /**
      * 500 SERVER_ERROR
