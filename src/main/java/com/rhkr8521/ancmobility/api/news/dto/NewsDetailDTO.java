@@ -13,6 +13,7 @@ public class NewsDetailDTO {
     private Long id;
     private String title;
     private String author;
+    private String subTitle;
     private String content;
     private LocalDateTime createdAt;
     private long viewCnt;
@@ -20,6 +21,7 @@ public class NewsDetailDTO {
     public NewsDetailDTO(News news) {
         this.id = news.getId();
         this.title = news.getTitle();
+        this.subTitle = news.getSubTitle();
         this.author = news.getAuthor() != null ? news.getAuthor().getNickname() : "알 수 없음";
         this.content = news.getContent();
         this.createdAt = news.getCreatedAt();
