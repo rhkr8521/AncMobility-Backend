@@ -43,6 +43,7 @@ public enum ErrorStatus {
     NOTICE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"공지사항을 찾을 수 없습니다."),
     FAQ_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"FAQ를 찾을 수 없습니다."),
     NEWS_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"뉴스를 찾을 수 없습니다."),
+    ALLIANCE_NOTFOUND_EXCEPTION(HttpStatus.NOT_FOUND,"제휴 정보를 찾을 수 없습니다."),
 
     /**
      * 500 SERVER_ERROR
