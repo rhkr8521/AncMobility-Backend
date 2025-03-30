@@ -33,6 +33,9 @@ public enum SuccessStatus {
     SEND_NEWS_SUCCESS(HttpStatus.OK,"뉴스 조회 성공"),
     UPDATE_NEWS_SUCCESS(HttpStatus.OK,"뉴스 수정 성공"),
     DELETE_NEWS_SUCCESS(HttpStatus.OK,"뉴스 삭제 성공"),
+    GET_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 조회 성공"),
+    UPDATE_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 수정 성공"),
+    DELETE_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 삭제 성공"),
 
     /**
      * 201
@@ -44,6 +47,7 @@ public enum SuccessStatus {
     SAVE_SERVICEINFO_SUCCESS(HttpStatus.CREATED,"서비스 정보 등록 성공"),
     SAVE_HOMEINFO_SUCCESS(HttpStatus.CREATED,"홈 화면 정보 등록 성공"),
     CREATE_NEWS_SUCCESS(HttpStatus.CREATED,"뉴스 등록 성공"),
+    CREATE_ALLIANCE_SUCCESS(HttpStatus.CREATED,"제휴 정보 등록 성공"),
 
     ;
 

@@ -66,8 +66,8 @@ public class SecurityConfig {
                         ).permitAll() // 스웨거, H2, healthCheck 허가
                         .requestMatchers(
                                 "/api/v1/member/register", "/api/v1/notice", "/api/v1/notice/*", "/api/v1/faq", "/api/v1/serviceinfo/*", "/api/v1/home","/api/v1/news", "/api/v1/news/*",
-                                "/api/v1/member/login","/api/v1/member/token-reissue", "/api/v1/term/*", "/api/v1/companyinfo/*", "/api/images/**"
-                        ).permitAll() // 회원가입, 로그인, 토큰 재발급, 약관, 회사 정보, 서비스 정보, 홈 정보, 뉴스 조회
+                                "/api/v1/member/login","/api/v1/member/token-reissue", "/api/v1/term/*", "/api/v1/companyinfo/*", "/api/images/**", "/api/v1/alliance"
+                        ).permitAll() // 회원가입, 로그인, 토큰 재발급, 약관, 회사 정보, 서비스 정보, 홈 정보, 뉴스, 제휴 조회
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->
