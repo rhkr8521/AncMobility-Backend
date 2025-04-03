@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -38,19 +39,20 @@ public class CompanyInfoService {
         }
     }
 
-    // 이미지 저장
+    // 이미지 저장 메서드 - timestamp(밀리초) + UUID를 사용해 고유한 파일명 생성
     private String storeImage(MultipartFile imageFile) {
         if (imageFile == null || imageFile.isEmpty()) {
             return null;
         }
-        // 현재 날짜 기반 파일명 생성 (년월일_시분초)
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        // 현재 날짜 기반 파일명 생성 (년월일_시분초_밀리초 + UUID)
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
+        String randomUUID = UUID.randomUUID().toString().replace("-", "");
         String originalFilename = imageFile.getOriginalFilename();
         String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        String newFileName = timestamp + extension;
+        String newFileName = timestamp + "_" + randomUUID + extension;
         File dest = new File(imageServerPath, newFileName);
 
         // 부모 디렉토리가 없으면 생성
