@@ -31,6 +31,12 @@ jobs:
       run: |
         mkdir -p src/main/resources
         echo "${{ secrets.APPLICATION_JWT_YML }}" > src/main/resources/application-jwt.yml
+
+    # 2-2. application-jwt.yml 파일 생성
+    - name: Create application-sms.yml
+      run: |
+        mkdir -p src/main/resources
+        echo "${{ secrets.APPLICATION_SMS_YML }}" > src/main/resources/application-sms.yml
         
     # 3. Gradle 설정
     - name: Setup Gradle
