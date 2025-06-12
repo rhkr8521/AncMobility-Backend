@@ -1,10 +1,12 @@
 package com.rhkr8521.ancmobility.api.franchise.service;
 
 import com.rhkr8521.ancmobility.api.franchise.dto.PhoneAuthRequestDTO;
+import com.rhkr8521.ancmobility.api.franchise.dto.PhoneAuthResponseDTO;
 import com.rhkr8521.ancmobility.api.franchise.entity.Franchise;
 import com.rhkr8521.ancmobility.api.franchise.entity.PhoneNumberVerification;
 import com.rhkr8521.ancmobility.api.franchise.repository.FranchiseRepository;
 import com.rhkr8521.ancmobility.api.franchise.repository.PhoneNumberVerificationRepository;
+import com.rhkr8521.ancmobility.api.member.dto.MemberLoginResponseDTO;
 import com.rhkr8521.ancmobility.api.member.jwt.service.JwtService;
 import com.rhkr8521.ancmobility.common.exception.BadRequestException;
 import com.rhkr8521.ancmobility.common.exception.InternalServerException;
@@ -96,7 +98,7 @@ public class SmsService {
 
     // 인증 코드 검증
     @Transactional
-    public String verifyCodeAndIssueToken(String code, LocalDateTime requestedAt) {
+    public PhoneAuthResponseDTO verifyCodeAndIssueToken(String code, LocalDateTime requestedAt) {
         PhoneNumberVerification verification = phoneNumberVerificationRepository.findByCode(code)
                 .orElseThrow(() -> new BadRequestException(ErrorStatus.WRONG_SMS_VERIFICATION_CODE_EXCEPTION.getMessage()));
 
@@ -109,7 +111,14 @@ public class SmsService {
 
         Franchise franchise = franchiseRepository.findByPhoneNumber(verification.getPhoneNumber()).orElseThrow(() -> new BadRequestException(ErrorStatus.MISSING_FRANCHISE_INFO_EXCEPTION.getMessage()));
 
-        return jwtService.createFranchiseToken(franchise.getId());
+        String accessToken = jwtService.createFranchiseToken(franchise.getId());
+
+        return new PhoneAuthResponseDTO(
+                franchise.getName(),
+                franchise.getPhoneNumber(),
+                franchise.getCarNumber(),
+                accessToken
+        );
     }
 }
 
