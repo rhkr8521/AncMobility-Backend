@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rhkr8521.ancmobility.api.member.entity.Member;
 import com.rhkr8521.ancmobility.api.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -33,7 +34,8 @@ public class JwtService {
     @Value("${jwt.refresh.expiration}")
     private Long refreshTokenExpirationPeriod;
 
-    private final Long duplicationTokenExpirationPeriod= 3600000L; // 1시간. 설마 1시간 동안 이메일 변경하겠어?
+    @Value("${jwt.franchise.expiration}")
+    private Long franchiseTokenExpirationPeriod;
 
     private final MemberRepository memberRepository;
 
@@ -42,6 +44,7 @@ public class JwtService {
         Date now = new Date();
         return JWT.create()
                 .withSubject(String.valueOf(memberId))
+                .withClaim("tokenType", "MEMBER")
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod))
                 .sign(Algorithm.HMAC512(secretKey));
     }
@@ -55,12 +58,14 @@ public class JwtService {
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
-    // Duplication Token 생성
-    public String createDuplicationToken(Long id) {
+    // 가맹점 전용 Access Token 생성
+    public String createFranchiseToken(Long franchiseId) {
         Date now = new Date();
         return JWT.create()
-                .withSubject(String.valueOf(id))
-                .withExpiresAt(new Date(now.getTime() + duplicationTokenExpirationPeriod))
+                .withSubject(String.valueOf(franchiseId))
+                .withClaim("tokenType", "FRANCHISE")
+                .withExpiresAt(new Date(now.getTime() + franchiseTokenExpirationPeriod))
+                // 필요하다면 .withClaim("type","FRANCHISE") 같이 토큰 구분용 클레임 추가
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -114,8 +119,6 @@ public class JwtService {
                     .verify(accessToken)
                     .getClaim("sub")
                     .asString());
-
-
             return sub;
         } catch (Exception e) {
             log.error("액세스 토큰이 유효하지 않습니다.");
@@ -123,23 +126,40 @@ public class JwtService {
         }
     }
 
-    public Optional<String> extractDuplicationId(String duplicationToken) {
+    // 가맹점 토큰에서 franchiseId 추출
+    public Optional<String> extractFranchiseId(String token) {
         try {
-            Optional<String> sub = Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
+            String sub = JWT.require(Algorithm.HMAC512(secretKey))
                     .build()
-                    .verify(duplicationToken)
-                    .getClaim("sub")
-                    .asString());
-
-
-            return sub;
+                    .verify(token)
+                    .getSubject();
+            return Optional.ofNullable(sub);
         } catch (Exception e) {
-            log.error("중복 토큰이 유효하지 않습니다.");
+            log.error("가맹점 토큰 검증 실패: {}", e.getMessage());
             return Optional.empty();
         }
     }
 
+    public boolean isFranchiseToken(String token) {
+        try {
+            DecodedJWT jwt = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
+            return "FRANCHISE".equals(jwt.getClaim("tokenType").asString());
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
+    public boolean isMemberToken(String token) {
+        try {
+            DecodedJWT jwt = JWT.require(Algorithm.HMAC512(secretKey))
+                    .build()
+                    .verify(token);
+            return "MEMBER".equals(jwt.getClaim("tokenType").asString());
+        } catch (Exception e) {
+            log.error("Member 토큰 타입 검증 실패: {}", e.getMessage());
+            return false;
+        }
+    }
 
     public Optional<String> extractEmail(String accessToken) {
         try {

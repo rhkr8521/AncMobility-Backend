@@ -1,5 +1,8 @@
 package com.rhkr8521.ancmobility.common.config.security;
 
+import com.rhkr8521.ancmobility.api.franchise.filter.FranchiseJwtAuthenticationFilter;
+import com.rhkr8521.ancmobility.api.franchise.repository.FranchiseRepository;
+import com.rhkr8521.ancmobility.api.member.jwt.service.JwtService;
 import com.rhkr8521.ancmobility.common.config.jwt.JwtConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +32,8 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtConfig jwtConfig;
+    private final JwtService jwtService;
+    private final FranchiseRepository franchiseRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -66,14 +71,19 @@ public class SecurityConfig {
                         ).permitAll() // 스웨거, H2, healthCheck 허가
                         .requestMatchers(
                                 "/api/v1/member/register", "/api/v1/notice", "/api/v1/notice/*", "/api/v1/faq", "/api/v1/serviceinfo/*", "/api/v1/home","/api/v1/news", "/api/v1/news/*",
-                                "/api/v1/member/login","/api/v1/member/token-reissue", "/api/v1/term/*", "/api/v1/companyinfo/*", "/api/images/**", "/api/v1/alliance"
-                        ).permitAll() // 회원가입, 로그인, 토큰 재발급, 약관, 회사 정보, 서비스 정보, 홈 정보, 뉴스, 제휴 조회
+                                "/api/v1/member/login","/api/v1/member/token-reissue", "/api/v1/term/*", "/api/v1/companyinfo/*", "/api/images/**", "/api/v1/alliance","/api/v1/franchise/verify-phone" , "/api/v1/franchise/verification-phone-code"
+                        ).permitAll() // 회원가입, 로그인, 토큰 재발급, 약관, 회사 정보, 서비스 정보, 홈 정보, 뉴스, 제휴 조회, 가맹점 로그인
+                        .requestMatchers("/api/v1/franchise/check","/api/v1/franchise/settlement").hasRole("FRANCHISE") // 가맹점 전용 토큰만 사용
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
         http.addFilterBefore(jwtConfig.jwtAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                new FranchiseJwtAuthenticationFilter(jwtService, franchiseRepository),
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
