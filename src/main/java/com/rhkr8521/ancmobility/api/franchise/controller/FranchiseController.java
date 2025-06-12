@@ -74,11 +74,11 @@ public class FranchiseController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "SMS 인증코드가 올바르지 않습니다."),
     })
     @PostMapping("/verification-phone-code")
-    public ResponseEntity<ApiResponse<String>> verifyPhoneCode(@RequestBody PhoneAuthVerifyDTO phoneAuthVerifyDTO) {
+    public ResponseEntity<ApiResponse<PhoneAuthResponseDTO>> verifyPhoneCode(@RequestBody PhoneAuthVerifyDTO phoneAuthVerifyDTO) {
 
         LocalDateTime requestedAt = LocalDateTime.now();
-        String token = smsService.verifyCodeAndIssueToken(phoneAuthVerifyDTO.getCode(), requestedAt);
-        return ApiResponse.success(SuccessStatus.SEND_VERIFY_SMS_CODE_SUCCESS, token);
+        PhoneAuthResponseDTO phoneAuthResponseDTO = smsService.verifyCodeAndIssueToken(phoneAuthVerifyDTO.getCode(), requestedAt);
+        return ApiResponse.success(SuccessStatus.SEND_VERIFY_SMS_CODE_SUCCESS, phoneAuthResponseDTO);
     }
 
     @Operation(
