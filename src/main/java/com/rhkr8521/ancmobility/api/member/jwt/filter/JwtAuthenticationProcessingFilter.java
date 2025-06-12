@@ -58,8 +58,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         return false;
     }
 
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
@@ -80,7 +78,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         // Access Token이 존재하고 유효한지 확인
         Optional<String> accessToken = extractToken(request, accessTokenHeader)
-                .filter(jwtService::isTokenValid);
+                .filter(jwtService::isTokenValid)
+                .filter(jwtService::isMemberToken);
 
         accessToken.ifPresent(token -> jwtService.extractMemberId(token)
                 .ifPresent(id -> memberRepository.findById(Long.valueOf(id))

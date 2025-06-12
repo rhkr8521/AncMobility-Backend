@@ -36,6 +36,15 @@ public enum SuccessStatus {
     GET_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 조회 성공"),
     UPDATE_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 수정 성공"),
     DELETE_ALLIANCE_SUCCESS(HttpStatus.OK,"제휴 정보 삭제 성공"),
+    SEND_SMS_VERIFICATION_CODE_SUCCESS(HttpStatus.OK,"SMS 인증코드 발송 성공"),
+    SEND_VERIFY_SMS_CODE_SUCCESS(HttpStatus.OK,"SMS 코드 인증 성공"),
+    SEND_FRANCHISE_LIST_SUCCESS(HttpStatus.OK, "가맹점 리스트 조회 성공"),
+    UPDATE_FRANCHISE_LIST_SUCCESS(HttpStatus.OK, "가맹점 수정 성공"),
+    DELETE_FRANCHISE_LIST_SUCCESS(HttpStatus.OK, "가맹점 삭제 성공"),
+    SEND_SETTLEMENT_LIST_SUCCESS(HttpStatus.OK,"가맹점 매출 조회 성공"),
+    UPDATE_FRANCHISE_SUCCESS(HttpStatus.OK,"가맹점 수정 성공"),
+    DELETE_FRANCHISE_SUCCESS(HttpStatus.OK,"가맹점 삭제 성공"),
+    DELETE_SETTLEMENT_SUCCESS(HttpStatus.OK, "정산내역 삭제 성공"),
 
     /**
      * 201
@@ -48,6 +57,8 @@ public enum SuccessStatus {
     SAVE_HOMEINFO_SUCCESS(HttpStatus.CREATED,"홈 화면 정보 등록 성공"),
     CREATE_NEWS_SUCCESS(HttpStatus.CREATED,"뉴스 등록 성공"),
     CREATE_ALLIANCE_SUCCESS(HttpStatus.CREATED,"제휴 정보 등록 성공"),
+    SEND_SETTLEMENT_UPLOAD_SUCCESS(HttpStatus.CREATED,"정산 내역 등록 성공"),
+    CREATE_FRANCHISE_SUCCESS(HttpStatus.CREATED,"가맹점 등록 성공"),
 
     ;
 
