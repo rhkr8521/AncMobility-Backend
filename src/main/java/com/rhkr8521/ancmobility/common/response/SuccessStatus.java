@@ -47,6 +47,8 @@ public enum SuccessStatus {
     DELETE_SETTLEMENT_SUCCESS(HttpStatus.OK, "정산내역 삭제 성공"),
     SEND_FRANCHISE_SEARCH_SUCCESS(HttpStatus.OK,"가맹점 검색 성공"),
     SEND_SETTLEMENT_SEARCH_SUCCESS(HttpStatus.OK,"매출내역 검색 성공"),
+    UPDATE_CONTACT_SUCCESS(HttpStatus.OK,"문의처 정보 수정 성공"),
+    GET_CONTACT_SUCCESS(HttpStatus.OK,"문의처 정보 조회 성공"),
 
     /**
      * 201
@@ -61,6 +63,7 @@ public enum SuccessStatus {
     CREATE_ALLIANCE_SUCCESS(HttpStatus.CREATED,"제휴 정보 등록 성공"),
     SEND_SETTLEMENT_UPLOAD_SUCCESS(HttpStatus.CREATED,"정산 내역 등록 성공"),
     CREATE_FRANCHISE_SUCCESS(HttpStatus.CREATED,"가맹점 등록 성공"),
+    SAVE_CONTACT_SUCCESS(HttpStatus.CREATED,"문의처 정보 등록 성공"),
 
     ;
 
