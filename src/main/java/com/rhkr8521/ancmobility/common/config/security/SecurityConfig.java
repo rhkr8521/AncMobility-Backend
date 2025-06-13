@@ -70,7 +70,7 @@ public class SecurityConfig {
                                 "/h2-console/**"
                         ).permitAll() // 스웨거, H2, healthCheck 허가
                         .requestMatchers(
-                                "/api/v1/member/register", "/api/v1/notice", "/api/v1/notice/*", "/api/v1/faq", "/api/v1/serviceinfo/*", "/api/v1/home","/api/v1/news", "/api/v1/news/*",
+                                "/api/v1/member/register", "/api/v1/notice", "/api/v1/notice/*", "/api/v1/faq", "/api/v1/serviceinfo/*", "/api/v1/home","/api/v1/news", "/api/v1/news/*", "/api/v1/contact",
                                 "/api/v1/member/login","/api/v1/member/token-reissue", "/api/v1/term/*", "/api/v1/companyinfo/*", "/api/images/**", "/api/v1/alliance","/api/v1/franchise/verify-phone" , "/api/v1/franchise/verification-phone-code"
                         ).permitAll() // 회원가입, 로그인, 토큰 재발급, 약관, 회사 정보, 서비스 정보, 홈 정보, 뉴스, 제휴 조회, 가맹점 로그인
                         .requestMatchers("/api/v1/franchise/check","/api/v1/franchise/settlement").hasRole("FRANCHISE") // 가맹점 전용 토큰만 사용
