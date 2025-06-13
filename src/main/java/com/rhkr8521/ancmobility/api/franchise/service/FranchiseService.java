@@ -204,6 +204,36 @@ public class FranchiseService {
                 .build();
     }
 
+    // 매출 내역 검색
+    public SettlementListResponseDTO<SettlementAdminResponseDTO> getSearchSettlement(
+            String name, LocalDate date, int page, int size, Long userId){
+
+        // 사용자 권한 확인
+        Member user = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorStatus.USER_NOTFOUND_EXCEPTION.getMessage()));
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new BadRequestException(ErrorStatus.NEED_ADMIN_ROLE_EXCEPTION.getMessage());
+        }
+
+        Page<Settlement> pageEntity = settlementRepository
+                .findByFranchise_NameAndSettlementDate(name, date, PageRequest.of(page, size));
+
+        List<SettlementAdminResponseDTO> content = pageEntity
+                .getContent()
+                .stream()
+                .map(this::toAdminDto)
+                .collect(Collectors.toList());
+
+        return SettlementListResponseDTO.<SettlementAdminResponseDTO>builder()
+                .totalElements(pageEntity.getTotalElements())
+                .totalPages(pageEntity.getTotalPages())
+                .page(pageEntity.getNumber())
+                .size(pageEntity.getSize())
+                .content(content)
+                .build();
+    }
+
     private SettlementResponseDTO toUserDto(Settlement s) {
         return SettlementResponseDTO.builder()
                 .id(s.getId())
@@ -326,6 +356,31 @@ public class FranchiseService {
 
         // 정산 내역 삭제
         settlementRepository.deleteById(id);
+    }
+
+    // 가맹점 검색
+    @Transactional(readOnly = true)
+    public FranchiseListResponseDTO getSearchFranchise(String name, int page, int size, Long userId){
+
+        // 사용자 권한 확인
+        Member user = memberRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ErrorStatus.USER_NOTFOUND_EXCEPTION.getMessage()));
+
+        if (user.getRole() != Role.ADMIN){
+            throw new BadRequestException(ErrorStatus.NEED_ADMIN_ROLE_EXCEPTION.getMessage());
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Franchise> franchises  = franchiseRepository.findByNameOrderByCreatedAtDesc(name, pageable);
+        Page<FranchiseListDTO> franchiseListDTOS = franchises.map(FranchiseListDTO::from);
+
+        return FranchiseListResponseDTO.builder()
+                .totalElements(franchises.getTotalElements())
+                .totalPages(franchises.getTotalPages())
+                .page(franchises.getNumber())
+                .size(franchises.getSize())
+                .content(franchiseListDTOS.getContent())
+                .build();
     }
 
     private BigDecimal parseDecimal(Cell cell, DataFormatter fmt) {
