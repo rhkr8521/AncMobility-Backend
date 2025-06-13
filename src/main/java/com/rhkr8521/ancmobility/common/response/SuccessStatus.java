@@ -45,6 +45,8 @@ public enum SuccessStatus {
     UPDATE_FRANCHISE_SUCCESS(HttpStatus.OK,"가맹점 수정 성공"),
     DELETE_FRANCHISE_SUCCESS(HttpStatus.OK,"가맹점 삭제 성공"),
     DELETE_SETTLEMENT_SUCCESS(HttpStatus.OK, "정산내역 삭제 성공"),
+    SEND_FRANCHISE_SEARCH_SUCCESS(HttpStatus.OK,"가맹점 검색 성공"),
+    SEND_SETTLEMENT_SEARCH_SUCCESS(HttpStatus.OK,"매출내역 검색 성공"),
 
     /**
      * 201

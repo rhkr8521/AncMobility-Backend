@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
@@ -14,4 +15,6 @@ public interface FranchiseRepository extends JpaRepository<Franchise, Long> {
     Optional<Franchise> findByPhoneNumber(String phoneNumber);
     Optional<Franchise> findById(Long id);
     Page<Franchise> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Franchise> findByNameOrderByCreatedAtDesc(String name, Pageable pageable);
+
 }

@@ -171,4 +171,29 @@ public class FranchiseController {
         franchiseService.deleteSettlement(id, securityMember.getId());
         return ApiResponse.success_only(SuccessStatus.DELETE_SETTLEMENT_SUCCESS);
     }
+
+    @Operation(summary = "관리자용: 가맹점 사용자 검색")
+    @GetMapping("/admin/search")
+    public ResponseEntity<ApiResponse<FranchiseListResponseDTO>> searchFranchise(@RequestParam String name,
+                                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                                 @RequestParam(defaultValue = "10") int size,
+                                                                                 @AuthenticationPrincipal SecurityMember securityMember) {
+        FranchiseListResponseDTO response = franchiseService.getSearchFranchise(name, page, size, securityMember.getId());
+        return ApiResponse.success(SuccessStatus.SEND_FRANCHISE_SEARCH_SUCCESS, response);
+    }
+
+    @Operation(summary = "관리자용: 매출 사용자 검색")
+    @GetMapping("/admin/settlement/search")
+    public ResponseEntity<ApiResponse<SettlementListResponseDTO<SettlementAdminResponseDTO>>> searchSettlement(
+            @RequestParam String name,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal SecurityMember securityMember){
+
+        SettlementListResponseDTO<SettlementAdminResponseDTO> settlementListResponseDTO =
+                franchiseService.getSearchSettlement(name, date, page, size, securityMember.getId());
+        return ApiResponse.success(SuccessStatus.SEND_SETTLEMENT_SEARCH_SUCCESS, settlementListResponseDTO);
+    }
+
 }
